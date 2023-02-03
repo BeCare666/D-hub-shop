@@ -1,58 +1,64 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-   <title>Firebase Image Upload using HTML and JavaScript</title>
    <style>
-      #photo{
-         margin-top: 200px;
-         margin-left: 450px;
+      #game {
+         width: 500px;
+         height: 500px;
+         background-color: #ccc;
+         position: relative;
       }
-      #upload{
-         margin-top: 20px;
-         margin-left: 450px;
+
+      #player {
+         width: 50px;
+         height: 50px;
+         background-color: blue;
+         position: absolute;
+         bottom: 0;
+         left: 0;
+      }
+
+      #game {
+         width: 500px;
+         height: 500px;
+         background-color: #ccc;
+         position: relative;
+      }
+
+      #player {
+         width: 50px;
+         height: 50px;
+         background-color: blue;
+         position: absolute;
+         bottom: 0;
+         left: 0;
       }
    </style>
 </head>
+
 <body>
-   <input type="file" id="photo" /></br>
-   <button id="upload" onclick="uploadImage()">Upload Image</button>
-  
+   <img  src="assets/img/clients/logo-Header.svg" alt="Talking Image" style="height: 50%;width: 50%;">
+
+   <textarea id="talkingImageText" cols="30" rows="10"></textarea>
+
+   <button id="talkingImage">start</button>
 </body>
-<script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-storage.js"></script>
 <script>
+   
+   const talkingImage = document.getElementById("talkingImage");
 
-   //paste here your copied configuration code
-   const firebaseConfig = {
-    apiKey: "AIzaSyBGXfuEogZqJN7HAWra0HLfUCTGJv5FBYI",
-    authDomain: "firbase2-77e95.firebaseapp.com",
-    databaseURL: "https://firbase2-77e95-default-rtdb.firebaseio.com",
-    projectId: "firbase2-77e95",
-    storageBucket: "firbase2-77e95.appspot.com",
-    messagingSenderId: "593724455882",
-    appId: "1:593724455882:web:22b05ead541e73e0966d33"
-   };
+   talkingImage.addEventListener("click", () => {
+      const talkingImageT = document.getElementById("talkingImageText").value;
+      const speechSynthesis = window.speechSynthesis;
+      const voices = speechSynthesis.getVoices();
+      const utterance = new SpeechSynthesisUtterance(`${talkingImageT}`);
+      utterance.voice = voices[0];
+      speechSynthesis.speak(utterance);
+      console.log(talkingImageT)
+   });
 
-   // Initialize Firebase
-   firebase.initializeApp(firebaseConfig);
-   console.log(firebase);
-   var urlImage = []
-   function uploadImage() {
-      const ref = firebase.storage().ref();
-      const file = document.querySelector("#photo").files[0];
-      const name = +new Date() + "-" + file.name;
-      const metadata = {
-         contentType: file.type
-      };
-      const task = ref.child(name).put(file, metadata);task
-      .then(snapshot => snapshot.ref.getDownloadURL())
-      .then(url => {
-      console.log(url);
-      urlImage.push(url)
-      alert('image uploaded successfully' + urlImage[0]);
-   })
-   .catch(console.error);
-   }
-   const errorMsgElement = document.querySelector('span#errorMsg');
+
 </script>
+
 </html>
